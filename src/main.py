@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 from preprocessor import Preprocessor
@@ -17,6 +18,12 @@ def get_x_test() -> pd.DataFrame:
 
 def save_to_csv(df: pd.DataFrame) -> None:
     df.to_csv("data/y_test.csv", index=False)
+
+
+def produce_dataframe(predictions: np.ndarray) -> pd.DataFrame:
+    df: pd.DataFrame = pd.DataFrame(predictions, columns=["ID", "RET_TARGET"])
+    df = df.sort_values(by=["ID"])
+    return df.reset_index(drop=True)
 
 
 def main():
