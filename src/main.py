@@ -1,7 +1,10 @@
 import numpy as np
 import pandas as pd
+import os
 
 from preprocessor import Preprocessor
+import keras_tuner as kt
+from trainer import build_model
 
 
 def get_x_train() -> pd.DataFrame:
@@ -27,6 +30,9 @@ def produce_dataframe(predictions: np.ndarray) -> pd.DataFrame:
 
 
 def main():
+    abspath = os.path.abspath(__file__)
+    dirname = os.path.dirname(abspath)
+    os.chdir(dirname)
     df_x_train = get_x_train()
     df_y_train = get_x_train()
     df_x_test = get_x_test()
