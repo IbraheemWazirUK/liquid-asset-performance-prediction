@@ -1,5 +1,5 @@
 import tensorflow as tf
-
+import numpy as np
 
 def build_model(hp):
     model = tf.keras.Sequential()
@@ -22,14 +22,17 @@ def build_model(hp):
         optimizer=tf.keras.optimizers.Adam(learning_rate=hp_learning_rate),
         loss=sign_binary_crossentropy,
         metrics=[custom_weighted_accuracy],
+        run_eagerly=True
     )
     return model
 
 
 def custom_weighted_accuracy(y_true: tf.Tensor, y_pred: tf.Tensor) -> float:
-    norm_y_acc = tf.reduce_sum(tf.abs(y_true))
-    return (1 / norm_y_acc) * tf.reduce_sum(
-        tf.abs(y_true) * (y_pred == tf.sign(norm_y_acc))
+    y_true = y_true.numpy()
+    y_pred = y_pred.numpy()
+    norm_y_true = np.sum(np.abs(y_true))
+    return (1 / norm_y_true) * np.sum(
+        np.abs(y_true) * (np.sign(y_pred - 0.5) == (np.sign(y_true)))
     )
 
 
